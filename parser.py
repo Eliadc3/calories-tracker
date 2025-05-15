@@ -101,7 +101,7 @@ def parse_meal_line(food_df, input_text, plural_map):
     
      # הוספת שורת סיכום
     summary = {
-        "מזון": "סה״כ",
+        "שם": "סה״כ",
         "כמות": "",
         "יחידה": "",
         "קלוריות": round(total_calories, 2),

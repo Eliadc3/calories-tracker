@@ -28,7 +28,7 @@ def index():
   if results:
     try:
         for row in results:
-            if row["מזון"] != "סה״כ":
+            if row["שם"] != "סה״כ":
                 append_row_to_sheet(row)  # שומר כל רכיב בנפרד
         print("✅ Meal data appended to Google Sheets.")
     except Exception as e:
