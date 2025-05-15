@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-from keep_alive import keep_alive
 from parser import load_food_db, parse_line, FOOD_SINGULAR_MAP
 from sheets_writer import append_row_to_sheet, get_all_rows
 from datetime import datetime, timedelta
@@ -64,10 +63,5 @@ def history():
 
     return render_template("history.html", rows=rows, filter_options=filter_options, filter_option=filter_option)
 
-# 🔹 שומר את השרת חי    
-keep_alive()
-
-# אין צורך ב־app.run() אם keep_alive קיים
 if __name__ == "__main__":
-  #app.run(debug=True)
-    pass
+    app.run(host="0.0.0.0", port=8080)
