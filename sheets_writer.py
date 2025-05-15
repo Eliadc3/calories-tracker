@@ -3,6 +3,13 @@ import json
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
+import pytz
+
+
+# הגדרת איזור זמן של ישראל
+def get_local_time():
+  israel_tz = pytz.timezone('Asia/Jerusalem')
+  return datetime.now(israel_tz).strftime("%d/%m/%Y %H:%M")
 
 # יוצרים חיבור ל־ Google Sheets
 def get_sheet():
@@ -19,7 +26,7 @@ def append_row_to_sheet(food_data):
   sheet = get_sheet()
   if isinstance(food_data, dict):
     row = [
-        datetime.now().strftime("%d/%m/%Y %H:%M"),
+        get_local_time(),
         food_data.get("name",""),
         food_data.get("quantity", ""),
         food_data.get("unit", ""),

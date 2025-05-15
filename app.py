@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from parser import load_food_db, parse_line, FOOD_SINGULAR_MAP
 from sheets_writer import append_row_to_sheet, get_all_rows
 from datetime import datetime, timedelta
+import pytz
 
 # יבוא כתיבה ל־Google Sheets
 
@@ -49,7 +50,8 @@ def history():
         except:
             row["תאריך"] = None
 
-    now = datetime.now()
+    israel = pytz.timezone("Asia/Jerusalem")
+    now = datetime.now(israel)
     if filter_option == "Today":
         rows = [r for r in rows if r["תאריך"] and r["תאריך"].date() == now.date()]
     elif filter_option == "Yesterday":
