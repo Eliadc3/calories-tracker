@@ -31,13 +31,12 @@ def index():
         for row in results:
             if row["שם"] != "סה״כ":
                 sheet_row = {
-            "תאריך": now,
-            "שם": row["מזון"],
-            "כמות": row["כמות"],
-            "יחידות": row["יחידה"],
-            "קלוריות": row["קלוריות"],
-            "גרם חלבון": row["חלבון"]
-        }
+                  "name": row["מזון"],
+                  "quantity": row["כמות"],
+                  "unit": row["יחידה"],
+                  "calories": row["קלוריות"],
+                  "protein": row["חלבון"]
+                }
                 append_row_to_sheet(sheet_row)  # שומר כל רכיב בנפרד
         print("✅ Meal data appended to Google Sheets.")
     except Exception as e:
