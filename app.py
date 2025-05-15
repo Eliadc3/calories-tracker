@@ -15,7 +15,7 @@ food_df = load_food_db()
 
 
 def index():
-  result = None
+  results = None
   input_text = ""
 
 # אם המשתמש שלח טופס
