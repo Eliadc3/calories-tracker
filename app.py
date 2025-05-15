@@ -4,16 +4,17 @@ from sheets_writer import append_row_to_sheet, get_all_rows
 from datetime import datetime, timedelta
 import pytz
 
-# יבוא כתיבה ל־Google Sheets
 
+israel = pytz.timezone("Asia/Jerusalem")
+now = datetime.now(israel)
+
+# יבוא כתיבה ל־Google Sheets
 app = Flask(__name__)  # יוצרים אובייקט של אפליקציה
 
 # טוען את טבלת המזון
 food_df = load_food_db()
 
 @app.route("/", methods=["GET", "POST"])
-
-
 def index():
   results = None
   input_text = ""
@@ -29,7 +30,15 @@ def index():
     try:
         for row in results:
             if row["שם"] != "סה״כ":
-                append_row_to_sheet(row)  # שומר כל רכיב בנפרד
+                sheet_row = {
+            "תאריך": now,
+            "שם": row["מזון"],
+            "כמות": row["כמות"],
+            "יחידות": row["יחידה"],
+            "קלוריות": row["קלוריות"],
+            "גרם חלבון": row["חלבון"]
+        }
+                append_row_to_sheet(sheet_row)  # שומר כל רכיב בנפרד
         print("✅ Meal data appended to Google Sheets.")
     except Exception as e:
         print(f"❌ Error appending meal to Google Sheets: {e}")            
@@ -49,8 +58,7 @@ def history():
         except:
             row["תאריך"] = None
 
-    israel = pytz.timezone("Asia/Jerusalem")
-    now = datetime.now(israel)
+    
     if filter_option == "Today":
         rows = [r for r in rows if r["תאריך"] and r["תאריך"].date() == now.date()]
     elif filter_option == "Yesterday":
