@@ -83,25 +83,34 @@ def parse_line(food_df, food_input, plural_map):
     return data
 
 def parse_meal_line(food_df, input_text, plural_map):
+    import re
     meal_items = re.split(r"[;,]", input_text)
     meal_results = []
     total_calories = 0
     total_protein = 0
+
     for item in meal_items:
         try:
-            result = parse_line(food_df, item, plural_map)
+            result = parse_line(food_df, item.strip(), plural_map)
             if result:
-                meal_results.append(result)
-                total_calories += result[0,"קלוריות"]
-                total_protein += result[0,"חלבון"]
+                # מיפוי לשמות בעברית
+                meal_results.append({
+                    "מזון": result["name"],
+                    "כמות": round(result["quantity"], 2),
+                    "יחידה": result["unit"],
+                    "קלוריות": round(result["calories"], 2),
+                    "חלבון": round(result["protein"], 2)
+                })
+                total_calories += result["calories"]
+                total_protein += result["protein"]
             else:
-                print(f"⚠️ לא הצלחנו לנתח את הרכיב: '{item}'")
+                print(f"⚠️ לא נמצא פריט: {item}")
         except Exception as e:
-             print(f"❌ שגיאה בניתוח '{item}': {e}")
-    
-     # הוספת שורת סיכום
+            print(f"❌ שגיאה בפריט '{item}': {e}")
+
+    # שורת סיכום
     summary = {
-        "שם": "סה״כ",
+        "מזון": "סה״כ",
         "כמות": "",
         "יחידה": "",
         "קלוריות": round(total_calories, 2),
