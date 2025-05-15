@@ -41,10 +41,13 @@
       border: 1px solid #ddd;
       padding: 12px;
       font-size:16px;
-      
     }
     th {
       background-color: #f0f0f0;
+    }
+    tr:last-child {
+      font-weight: bold;
+      background-color: #eafaf1;
     }
   </style>
 </head>
@@ -52,14 +55,14 @@
   <h1>🔍 מחשבון קלוריות וחלבון</h1>
 
   <form method="POST">
-    <label>מה אכלת?</label>
-    <div></div>
-    <input type="text" id=food_input name="food_input" placeholder="לדוגמה: 2 ביצים, כף טחינה" value="{{ input_text }}"">
+    <label>מה אכלת?</label><br>
+    <input type="text" name="food_input" placeholder="לדוגמה: 2 ביצים, כף טחינה" value="{{ input_text }}">
     <button type="submit">חשב</button>
-    </form>
+  </form>
+
   <a href="/history"><button>📖 היסטוריה</button></a>
-  {% if result %}
-    
+
+  {% if results %}
     <h2>📊 תוצאה:</h2>
     <table>
       <tr>
@@ -69,16 +72,22 @@
         <th>קלוריות</th>
         <th>חלבון</th>
       </tr>
-      <tr>
-        <td>{{result.name}}</td>
-        <td>{{result.quantity|round(2) }}</td>
-        <td>{{result.unit}}</td> 
-        <td>{{result.calories|round(2) }}</td>
-        <td>{{result.protein|round(2) }}</td>
-      </tr>
+      {% for row in results %}
+        <tr>
+          <td>{{ row["מזון"] }}</td>
+          <td>{{ row["כמות"] }}</td>
+          <td>{{ row["יחידה"] }}</td>
+          <td>{{ row["קלוריות"] }}</td>
+          <td>{{ row["חלבון"] }}</td>
+        </tr>
+      {% endfor %}
     </table>
-  
-{% endif %}
-  
+        {% set summary = results[-1] %}
+    <p style="margin-top: 15px; font-size: 18px;">
+      🧮 <strong>סה״כ:</strong>
+      {{ summary["קלוריות"] }} קלוריות,
+      {{ summary["חלבון"] }} גרם חלבון
+    </p>
+  {% endif %}
 </body>
-</html>  
+</html>

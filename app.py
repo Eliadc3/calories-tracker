@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from parser import load_food_db, parse_line, FOOD_SINGULAR_MAP
+from parser import load_food_db, parse_meal_line, FOOD_SINGULAR_MAP
 from sheets_writer import append_row_to_sheet, get_all_rows
 from datetime import datetime, timedelta
 import pytz
@@ -22,20 +22,19 @@ def index():
   if request.method == "POST":
     input_text = request.form["food_input"]
     # פונקציה שמקבלת שורה של מזון ומחזירה את הנתונים המחושבים
-    result = parse_line(food_df, input_text, FOOD_SINGULAR_MAP)
-    print("🔎 result =", result)
-    print("📦 סוג התוצאה:", type(result))
+    results = parse_meal_line(food_df, input_text, FOOD_SINGULAR_MAP)
 
     # 🔹 שולח את הנתונים ל־Google Sheets
-    if result:
-      try:
-        append_row_to_sheet(result)
-        print("✅ Data successfully appended to Google Sheets.")
-      except Exception as e:
-        print(f"❌ Error appending data to Google Sheets: {e} ")
-                         
+  if results:
+    try:
+        for row in results:
+            if row["מזון"] != "סה״כ":
+                append_row_to_sheet(row)  # שומר כל רכיב בנפרד
+        print("✅ Meal data appended to Google Sheets.")
+    except Exception as e:
+        print(f"❌ Error appending meal to Google Sheets: {e}")            
    # 🔹 שולח את התוצאה לדף HTML
-  return render_template("index.html", result=result, input_text=input_text)
+  return render_template("index.html", results=results, input_text=input_text)
 
 @app.route("/history")
 def history():
