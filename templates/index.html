@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>מחשבון קלוריות וחלבון</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      text-align: right;
+      background-color: #f4f4f4;
+      margin: 30px;
+    }
+    h1 {
+      color: #333;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: 70%;
+      padding: 12px;
+      font-size:18px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      margin-top:10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color:white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      font-size:16px;
+      
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 מחשבון קלוריות וחלבון</h1>
+
+  <form method="POST">
+    <label>מה אכלת?</label>
+    <div></div>
+    <input type="text" id=food_input name="food_input" placeholder="לדוגמה: 2 ביצים, כף טחינה" value="{{ input_text }}"">
+    <button type="submit">חשב</button>
+    </form>
+  <a href="/history"><button>📖 היסטוריה</button></a>
+  {% if result %}
+    
+    <h2>📊 תוצאה:</h2>
+    <table>
+      <tr>
+        <th>שם</th>
+        <th>כמות</th>
+        <th>יחידה</th>
+        <th>קלוריות</th>
+        <th>חלבון</th>
+      </tr>
+      <tr>
+        <td>{{result.name}}</td>
+        <td>{{result.quantity|round(2) }}</td>
+        <td>{{result.unit}}</td> 
+        <td>{{result.calories|round(2) }}</td>
+        <td>{{result.protein|round(2) }}</td>
+      </tr>
+    </table>
+  
+{% endif %}
+  
+</body>
+</html>  
