@@ -26,12 +26,13 @@ def append_row_to_sheet(food_data):
   sheet = get_sheet()
   if isinstance(food_data, dict):
     row = [
-        food_data.get("date", get_local_time()),
-        food_data.get("name",""),
-        food_data.get("quantity", ""),
-        food_data.get("unit", ""),
-        food_data.get("calories",""),
-        food_data.get("protein",""),     
+        food_data.get("תאריך", get_local_time()),
+        food_data.get("שם",""),
+        food_data.get("כמות", ""),
+        food_data.get("יחידה", ""),
+        food_data.get("קלוריות",""),
+        food_data.get("חלבון",""), 
+        food_data.get("סוג ארוחה","")    
     ]
   else:
     row = food_data

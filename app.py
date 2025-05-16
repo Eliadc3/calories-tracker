@@ -46,7 +46,7 @@ def index():
 
         # קלט תאריך ושעה ידני (אם סופק)
     manual_dt_str = request.form.get("manual_datetime", "").strip()
-    is_snack = "נשנוש" in request.form
+    is_snack = "is_snack" in request.form
 
     if manual_dt_str:
         parsed_dt = datetime.strptime(manual_dt_str, "%Y-%m-%dT%H:%M")
@@ -60,22 +60,21 @@ def index():
   if results:
     try:
         num_items = len([r for r in results if r["שם"] != "סה״כ"])
-        summary = {
-          next((r for r in results if r["שם"] == "סה״כ"), None)
-        }
+        summary = next((r for r in results if r["שם"] == "סה״כ"), None)
+        
         total_calories = summary["קלוריות"] if summary else 0
         meal_type = get_meal_label(is_snack, num_items, total_calories)
 
         for row in results:
             if row["שם"] != "סה״כ":
                 sheet_row = {
-                  "date": date_str,
-                  "name": row["שם"],
-                  "quantity": row["כמות"],
-                  "unit": row["יחידה"],
-                  "calories": row["קלוריות"],
-                  "protein": row["חלבון"],
-                  "meal_type": meal_type
+                  "תאריך": date_str,
+                  "שם": row["שם"],
+                  "כמות": row["כמות"],
+                  "יחידה": row["יחידה"],
+                  "קלוריות": row["קלוריות"],
+                  "חלבון": row["חלבון"],
+                  "סוג ארוחה": meal_type
                 }
                 append_row_to_sheet(sheet_row)  # שומר כל רכיב בנפרד
         print("✅ Meal data appended to Google Sheets.")
@@ -97,6 +96,8 @@ def history():
         except:
             row["תאריך"] = None
 
+    israel = pytz.timezone("Asia/Jerusalem")
+    now = datetime.now(israel)
     
     if filter_option == "Today":
         rows = [r for r in rows if r["תאריך"] and r["תאריך"].date() == now.date()]
