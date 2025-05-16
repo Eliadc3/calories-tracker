@@ -35,6 +35,7 @@ def append_row_to_sheet(food_data):
     ]
   else:
     row = food_data
+    print("📤 שולח שורה לגיליון:", row)
   sheet.append_row(row)
 
 def get_all_rows():

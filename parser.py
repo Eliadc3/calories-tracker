@@ -95,7 +95,7 @@ def parse_meal_line(food_df, input_text, plural_map):
             if result:
                 # מיפוי לשמות בעברית
                 meal_results.append({
-                    "מזון": result["name"],
+                    "שם": result["name"],
                     "כמות": round(result["quantity"], 2),
                     "יחידה": result["unit"],
                     "קלוריות": round(result["calories"], 2),
@@ -110,7 +110,7 @@ def parse_meal_line(food_df, input_text, plural_map):
 
     # שורת סיכום
     summary = {
-        "מזון": "סה״כ",
+        "שם": "סה״כ",
         "כמות": "",
         "יחידה": "",
         "קלוריות": round(total_calories, 2),

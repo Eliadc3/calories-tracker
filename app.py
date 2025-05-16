@@ -31,7 +31,7 @@ def index():
         for row in results:
             if row["שם"] != "סה״כ":
                 sheet_row = {
-                  "name": row["מזון"],
+                  "name": row["שם"],
                   "quantity": row["כמות"],
                   "unit": row["יחידה"],
                   "calories": row["קלוריות"],
