@@ -26,7 +26,7 @@ def append_row_to_sheet(food_data):
   sheet = get_sheet()
   if isinstance(food_data, dict):
     row = [
-        food_data.get("תאריך", get_local_time()),
+        food_data.get("date", get_local_time()),
         food_data.get("name",""),
         food_data.get("quantity", ""),
         food_data.get("unit", ""),

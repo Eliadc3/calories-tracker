@@ -54,17 +54,17 @@
 <body>
   <h1>🔍 מחשבון קלוריות וחלבון</h1>
 
-  <input method="POST">
+  <form method="POST">
     <label>מה אכלת?</label><br>
     <input type="text" name="food_input" placeholder="לדוגמה: 2 ביצים, כף טחינה" value="{{ input_text }}">
-    <button type="submit">חשב</button>
     <h3>
       <label for="manual_datetime">📆 תאריך ושעה ידניים:</label>
-<input type="datetime-local" id="manual_datetime" name="manual_datetime">
+      <input type="datetime-local" id="manual_datetime" name="manual_datetime">
       <label>
         <input type="checkbox" name="is_snack" > 🍪 זה נשנוש </input>
       </label>
     </h3> 
+    <button type="submit">חשב</button>
   </form>
     
   <a href="/history"><button>📖 היסטוריה</button></a>

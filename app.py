@@ -1,18 +1,37 @@
 from flask import Flask, render_template, request
 from parser import load_food_db, parse_meal_line, FOOD_SINGULAR_MAP
-from sheets_writer import append_row_to_sheet, get_all_rows
+from sheets_writer import append_row_to_sheet, get_all_rows, get_local_time
 from datetime import datetime, timedelta
 import pytz
 
 
-israel = pytz.timezone("Asia/Jerusalem")
-now = datetime.now(israel)
+
 
 # יבוא כתיבה ל־Google Sheets
 app = Flask(__name__)  # יוצרים אובייקט של אפליקציה
 
 # טוען את טבלת המזון
 food_df = load_food_db()
+
+def get_meal_label(is_snack:bool, num_items: int, total_calories: float) -> str:
+    israel = pytz.timezone("Asia/Jerusalem")
+    hour = datetime.now(israel).hour
+
+    if is_snack:
+        return "נשנוש"
+    if num_items <= 1 and total_calories <= 200:
+        return "נשנוש"
+    if 0 <= hour < 5:
+        return "לילה"
+    elif 5 <= hour < 11:
+        return "בוקר"
+    elif 11 <= hour < 18:
+        return "צהריים"
+    elif 18 <= hour < 22:
+        return "ערב"
+    elif 22 <= hour < 24:
+        return "לילה"
+    return "נשנוש"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -27,6 +46,7 @@ def index():
 
         # קלט תאריך ושעה ידני (אם סופק)
     manual_dt_str = request.form.get("manual_datetime", "").strip()
+    is_snack = "נשנוש" in request.form
 
     if manual_dt_str:
         parsed_dt = datetime.strptime(manual_dt_str, "%Y-%m-%dT%H:%M")
@@ -35,18 +55,27 @@ def index():
         from sheets_writer import get_local_time
         date_str = get_local_time()
 
+
     # 🔹 שולח את הנתונים ל־Google Sheets
   if results:
     try:
+        num_items = len([r for r in results if r["שם"] != "סה״כ"])
+        summary = {
+          next((r for r in results if r["שם"] == "סה״כ"), None)
+        }
+        total_calories = summary["קלוריות"] if summary else 0
+        meal_type = get_meal_label(is_snack, num_items, total_calories)
+
         for row in results:
             if row["שם"] != "סה״כ":
                 sheet_row = {
-                  "תאריך": date_str,
+                  "date": date_str,
                   "name": row["שם"],
                   "quantity": row["כמות"],
                   "unit": row["יחידה"],
                   "calories": row["קלוריות"],
-                  "protein": row["חלבון"]
+                  "protein": row["חלבון"],
+                  "meal_type": meal_type
                 }
                 append_row_to_sheet(sheet_row)  # שומר כל רכיב בנפרד
         print("✅ Meal data appended to Google Sheets.")
