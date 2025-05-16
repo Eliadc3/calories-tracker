@@ -25,12 +25,23 @@ def index():
     # פונקציה שמקבלת שורה של מזון ומחזירה את הנתונים המחושבים
     results = parse_meal_line(food_df, input_text, FOOD_SINGULAR_MAP)
 
+        # קלט תאריך ושעה ידני (אם סופק)
+    manual_dt_str = request.form.get("manual_datetime", "").strip()
+
+    if manual_dt_str:
+        parsed_dt = datetime.strptime(manual_dt_str, "%Y-%m-%dT%H:%M")
+        date_str = parsed_dt.strftime("%d/%m/%Y %H:%M")
+    else:
+        from sheets_writer import get_local_time
+        date_str = get_local_time()
+
     # 🔹 שולח את הנתונים ל־Google Sheets
   if results:
     try:
         for row in results:
             if row["שם"] != "סה״כ":
                 sheet_row = {
+                  "תאריך": date_str,
                   "name": row["שם"],
                   "quantity": row["כמות"],
                   "unit": row["יחידה"],
