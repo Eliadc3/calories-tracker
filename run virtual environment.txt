@@ -1,0 +1,2 @@
+PS C:\code\Python\calories-tracker> python -m venv venv                                                                                                              
+PS C:\code\Python\calories-tracker> .\venv\Scripts\Activate.ps1        

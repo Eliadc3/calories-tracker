@@ -3,19 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <title>אישור זיהוי</title>
+  <style>
+    body { font-family: Arial; direction: rtl; text-align: right; background: #f9f9f9; padding: 30px; }
+    img { max-width: 300px; border: 1px solid #ccc; margin-bottom: 20px; }
+    ul { list-style-type: square; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 20px; }
+  </style>
 </head>
 <body>
-  <h2>🔍 זיהינו את המאכלים הבאים:</h2>
-  <img src="/{{ image_path }}" width="300"><br><br>
-  <ul>
-    {% for item in items %}
-      <li>{{ item }}</li>
-    {% endfor %}
-  </ul>
 
-  <form method="POST" action="/">
-    <label>האם הזיהוי נכון?</label><br>
-    <button type="submit">כן, המשך</button>
-  </form>
+  <h1>🖼️ זיהוי מהתמונה</h1>
+
+  {% if image_path %}
+    <img src="{{ image_path }}" alt="Uploaded Image">
+  {% endif %}
+
+  <h2>🥗 אלו המאכלים שזוהו בתמונה:</h2>
+
+  {% if detected %}
+    <ul>
+      {% for item in detected %}
+        <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+    <form method="POST" action="/">
+      <input type="hidden" name="food_input" value="{{ ', '.join(detected) }}">
+      <button type="submit">✅ כן, זה מה שאכלתי</button>
+    </form>
+  {% else %}
+    <p>❌ לא זוהו מאכלים בתמונה.</p>
+  {% endif %}
+
+  <a href="/">🔙 חזרה</a>
+
 </body>
 </html>

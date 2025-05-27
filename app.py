@@ -17,7 +17,7 @@ app.config["UPLOAD_FOLDER"] = "static/uploads"
 
 # טוען את טבלת המזון
 food_df = load_food_db()
-translation_map = load_translation_map("data/food_tranlation_map.csv")
+translation_map = load_translation_map("data/food_translation_map.csv")
 
 def get_meal_label(is_snack:bool, num_items: int, total_calories: float) -> str:
     israel = pytz.timezone("Asia/Jerusalem")
