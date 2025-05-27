@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>היסטוריית מזון</title>
+  <style>
+    body { font-family: Arial; direction: rtl; background: #f4f4f4; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; background: white; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; }
+    th { background: #e0e0e0; }
+    .filters a { margin-left: 10px; text-decoration: none; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>📅 היסטוריית ארוחות</h1>
+  <div class="filters">
+    סינון:
+    <a href="/history?filter=All" {% if filter_option=='All' %}style="color:red"{% endif %}>הכל</a>
+    <a href="/history?filter=Today" {% if filter_option=='Today' %}style="color:red"{% endif %}>היום</a>
+    <a href="/history?filter=Yesterday" {% if filter_option=='Yesterday' %}style="color:red"{% endif %}>אתמול</a>
+    <a href="/history?filter=Last 7 Days" {% if filter_option=='Last 7 Days' %}style="color:red"{% endif %}>7 ימים אחרונים</a>
+    <a href="/history?filter=Last 30 Days" {% if filter_option=='Last 30 Days' %}style="color:red"{% endif %}>30 ימים אחרונים</a>
+  </div>
+  <a href="/"><button>⬅️ חזרה</button></a>
+
+  {% if rows %}
+    <table>
+      <tr>
+        <th>תאריך</th>
+        <th>שם</th>
+        <th>כמות</th>
+        <th>יחידות</th>
+        <th>קלוריות</th>
+        <th>גרם חלבון</th>
+      </tr>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row["תאריך"].strftime("%d/%m/%Y %H:%M") if row["תאריך"] else "" }}</td>
+        <td>{{ row["שם"] }}</td>
+        <td>{{ row["כמות"] }}</td>
+        <td>{{ row["יחידות"] }}</td>
+        <td>{{ row["קלוריות"] }}</td>
+        <td>{{ row["גרם חלבון"] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>אין נתונים להצגה.</p>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>אישור זיהוי</title>
+</head>
+<body>
+  <h2>🔍 זיהינו את המאכלים הבאים:</h2>
+  <img src="/{{ image_path }}" width="300"><br><br>
+  <ul>
+    {% for item in items %}
+      <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+
+  <form method="POST" action="/">
+    <label>האם הזיהוי נכון?</label><br>
+    <button type="submit">כן, המשך</button>
+  </form>
+</body>
+</html>

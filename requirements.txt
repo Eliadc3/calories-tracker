@@ -1,0 +1,9 @@
+Flask
+pandas
+gspread
+oauth2client
+pytz
+imageai==2.1.6
+tensorflow==2.7.0
+opencv-python
+pillow

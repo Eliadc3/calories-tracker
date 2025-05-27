@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>מחשבון קלוריות וחלבון</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      text-align: right;
+      background-color: #f4f4f4;
+      margin: 30px;
+    }
+    h1 {
+      color: #333;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: 70%;
+      padding: 8px;
+      font-size:18px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      margin-top:10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color:white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      font-size:16px;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    tr:last-child {
+      font-weight: bold;
+      background-color: #eafaf1;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 מחשבון קלוריות וחלבון</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    <label>מה אכלת?</label><br>
+    <input type="text" name="food_input" placeholder="לדוגמה: 2 ביצים, כף טחינה" value="{{ input_text }}">
+
+    <label>או העלה תמונה:</label>
+    <p><a href="/upload">📷 העלה תמונה של מה שאכלת</a></p>
+    <input type="file" name="image_input">
+    <h3>
+      <div>
+        <input type="checkbox" name="is_snack" > 🍪 זה נשנוש </input>
+      </div>
+      <div>
+        <label for="manual_datetime">📆 תאריך ושעה ידניים:</label>
+        <input type="datetime-local" id="manual_datetime" name="manual_datetime">
+      </div>
+    </h3> 
+    <button type="submit">חשב</button>
+  </form>
+    
+  <a href="/history"><button>📖 היסטוריה</button></a>
+
+  {% if results %}
+    <h2>📊 תוצאה:</h2>
+    <table>
+      <tr>
+        <th>שם</th>
+        <th>כמות</th>
+        <th>יחידה</th>
+        <th>קלוריות</th>
+        <th>חלבון</th>
+      </tr>
+      {% for row in results %}
+        <tr>
+          <td>{{ row["שם"] }}</td>
+          <td>{{ row["כמות"] }}</td>
+          <td>{{ row["יחידה"] }}</td>
+          <td>{{ row["קלוריות"] }}</td>
+          <td>{{ row["חלבון"] }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+        {% set summary = results[-1] %}
+    <p style="margin-top: 15px; font-size: 18px;">
+      🧮 <strong>סה״כ:</strong>
+      {{ summary["קלוריות"] }} קלוריות,
+      {{ summary["חלבון"] }} גרם חלבון
+    </p>
+  {% endif %}
+</body>
+</html>
